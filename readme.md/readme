@@ -1,0 +1,221 @@
+# Predictive Maintenance – Remaining Useful Life (RUL) Prediction
+
+## Project Overview
+This project focuses on **predictive maintenance** by estimating the **Remaining Useful Life (RUL)** of turbofan jet engines using sensor and operating condition data.  
+The goal is to predict how many operational cycles an engine can continue before failure, enabling timely maintenance and preventing unexpected breakdowns.
+
+The project is built step by step, starting from data understanding and feature engineering to baseline model evaluation, following a **professional machine learning workflow**.
+
+---
+
+## Problem Statement
+Aircraft engines degrade over time due to continuous operation.  
+Using historical sensor data, this project aims to:
+
+- Model engine degradation behavior
+- Predict the remaining number of cycles before failure (RUL)
+- Validate whether engine condition snapshots can be used to estimate RUL
+
+This is formulated as a **supervised regression problem**, where the target variable is numerical.
+
+---
+
+## Dataset
+**NASA Turbofan Jet Engine Degradation Dataset (FD001)**
+
+### Files Used So Far
+- `train_FD001.txt`  
+  Contains full run-to-failure data for multiple engines.  
+  This file is used to compute true RUL values and train models.
+
+### Dataset Characteristics
+- Multiple engines
+- Each engine runs for several cycles until failure
+- Each cycle contains:
+  - Engine ID
+  - Cycle number
+  - 3 operating settings
+  - 21 sensor readings
+
+---
+
+## Project Approach (So Far)
+
+### 1. Data Understanding & Preparation
+- Loaded raw text data using pandas
+- Assigned meaningful column names
+- Understood engine-cycle structure
+- Treated each engine-cycle row as a **snapshot** of engine condition
+
+---
+
+### 2. RUL Target Creation
+Since the dataset does not directly provide RUL for training data:
+
+- For each engine, the last cycle represents failure
+- RUL was computed as:
+    # Predictive Maintenance – Remaining Useful Life (RUL) Prediction
+
+## Project Overview
+This project focuses on **predictive maintenance** by estimating the **Remaining Useful Life (RUL)** of turbofan jet engines using sensor and operating condition data.  
+The goal is to predict how many operational cycles an engine can continue before failure, enabling timely maintenance and preventing unexpected breakdowns.
+
+The project is built step by step, starting from data understanding and feature engineering to baseline model evaluation, following a **professional machine learning workflow**.
+
+---
+
+## Problem Statement
+Aircraft engines degrade over time due to continuous operation.  
+Using historical sensor data, this project aims to:
+
+- Model engine degradation behavior
+- Predict the remaining number of cycles before failure (RUL)
+- Validate whether engine condition snapshots can be used to estimate RUL
+
+This is formulated as a **supervised regression problem**, where the target variable is numerical.
+
+---
+
+## Dataset
+**NASA Turbofan Jet Engine Degradation Dataset (FD001)**
+
+### Files Used So Far
+- `train_FD001.txt`  
+  Contains full run-to-failure data for multiple engines.  
+  This file is used to compute true RUL values and train models.
+
+### Dataset Characteristics
+- Multiple engines
+- Each engine runs for several cycles until failure
+- Each cycle contains:
+  - Engine ID
+  - Cycle number
+  - 3 operating settings
+  - 21 sensor readings
+
+---
+
+## Project Approach (So Far)
+
+### 1. Data Understanding & Preparation
+- Loaded raw text data using pandas
+- Assigned meaningful column names
+- Understood engine-cycle structure
+- Treated each engine-cycle row as a **snapshot** of engine condition
+
+---
+
+### 2. RUL Target Creation
+Since the dataset does not directly provide RUL for training data:
+
+- For each engine, the last cycle represents failure
+- RUL was computed as:
+    RUL = max_cycle_of_engine − current_cycle
+
+
+This created a labeled dataset suitable for supervised learning.
+
+---
+
+### 3. Feature Engineering
+#### Sensor Analysis
+- Visualized sensor behavior across cycles
+- Identified sensors showing **consistent degradation patterns**
+- Avoided using all sensors to reduce noise
+
+#### Selected Features
+- 5 degradation-relevant sensors (based on visualization)
+- 3 operating settings
+
+These were combined to form the **feature matrix (X)**.
+
+---
+
+### 4. Feature Matrix and Target Variable
+- **X (features):**
+  - Selected sensors
+  - Operating settings
+- **y (target):**
+  - Remaining Useful Life (RUL)
+
+Each row in X corresponds to one engine snapshot, and each value in y represents its true remaining life.
+
+---
+
+### 5. Train–Test Split
+- Split data into:
+  - 80% training data
+  - 20% testing data
+- Ensured no data leakage
+- Maintained alignment between X and y
+
+---
+
+### 6. Baseline Model – Linear Regression
+A **Linear Regression model** was trained as a baseline to validate learnability.
+
+**Why Linear Regression?**
+- Simple and interpretable
+- Helps verify whether engineered features contain predictive signal
+- Acts as a reference point before using complex models
+
+---
+
+### 7. Model Evaluation
+Predictions were made on unseen test data and evaluated using:
+
+- **MAE (Mean Absolute Error)**  
+  Average prediction error in cycles
+
+- **RMSE (Root Mean Squared Error)**  
+  Penalizes large prediction errors
+
+#### Results
+- MAE ≈ **35 cycles**
+- RMSE ≈ **45 cycles**
+
+**Interpretation:**
+- The model learns meaningful patterns
+- Linear assumptions are insufficient for precise RUL estimation
+- Indicates the need for non-linear models
+
+---
+
+## Current Status
+✔ Data prepared and labeled  
+✔ Feature engineering completed  
+✔ Baseline model trained and evaluated  
+✔ Learning signal validated  
+
+---
+
+## Next Steps
+- Train non-linear models (e.g., XGBoost)
+- Compare performance against baseline
+- Select final model
+- Save trained model
+- Deploy model as an API using cloud services
+
+---
+
+## Tools & Technologies Used
+- Python
+- pandas, NumPy
+- scikit-learn
+- Matplotlib
+- Jupyter Notebook
+- Git & GitHub
+
+---
+
+## Key Learning Outcomes So Far
+- Understanding of predictive maintenance problems
+- Snapshot-based modeling for time-dependent systems
+- Feature selection through data visualization
+- Importance of baseline models
+- Proper use of regression metrics (MAE, RMSE)
+
+---
+
+## Author
+Shadya Panneerselvam
