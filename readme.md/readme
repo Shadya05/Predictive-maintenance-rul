@@ -113,109 +113,124 @@ Since the dataset does not directly provide RUL for training data:
     RUL = max_cycle_of_engine − current_cycle
 
 
-This created a labeled dataset suitable for supervised learning.
+
+This transformed raw data into a **labeled dataset** suitable for supervised learning.
 
 ---
 
 ### 3. Feature Engineering
+
 #### Sensor Analysis
-- Visualized sensor behavior across cycles
-- Identified sensors showing **consistent degradation patterns**
-- Avoided using all sensors to reduce noise
+- Visualized sensor behavior across operational cycles  
+- Identified sensors showing **consistent degradation trends**  
+- Avoided flat or noisy sensors  
 
 #### Selected Features
-- 5 degradation-relevant sensors (based on visualization)
-- 3 operating settings
+- A subset of degradation-relevant sensors  
+- All 3 operating settings  
 
-These were combined to form the **feature matrix (X)**.
+These features were combined to form the **feature matrix (X)**.
 
 ---
 
 ### 4. Feature Matrix and Target Variable
 - **X (features):**
-  - Selected sensors
-  - Operating settings
+  - Selected sensor values  
+  - Operating settings  
 - **y (target):**
-  - Remaining Useful Life (RUL)
+  - Remaining Useful Life (RUL)  
 
-Each row in X corresponds to one engine snapshot, and each value in y represents its true remaining life.
+Each row in X represents one engine snapshot, and the corresponding value in y represents the remaining life for that snapshot.
 
 ---
 
 ### 5. Train–Test Split
-- Split data into:
-  - 80% training data
-  - 20% testing data
-- Ensured no data leakage
-- Maintained alignment between X and y
+- Split data into training and testing sets (80/20)  
+- Ensured alignment between features and target  
+- Prevented data leakage  
 
 ---
 
 ### 6. Baseline Model – Linear Regression
-A **Linear Regression model** was trained as a baseline to validate learnability.
+A **Linear Regression model** was trained to establish a baseline.
 
-**Why Linear Regression?**
-- Simple and interpretable
-- Helps verify whether engineered features contain predictive signal
-- Acts as a reference point before using complex models
+**Purpose:**
+- Validate whether engineered features contain predictive signal  
+- Provide a reference point for more complex models  
 
----
-
-### 7. Model Evaluation
-Predictions were made on unseen test data and evaluated using:
-
-- **MAE (Mean Absolute Error)**  
-  Average prediction error in cycles
-
-- **RMSE (Root Mean Squared Error)**  
-  Penalizes large prediction errors
+#### Evaluation Metrics
+- **MAE (Mean Absolute Error):** average prediction error in cycles  
+- **RMSE (Root Mean Squared Error):** penalizes large errors  
 
 #### Results
-- MAE ≈ **35 cycles**
-- RMSE ≈ **45 cycles**
+- MAE ≈ **35 cycles**  
+- RMSE ≈ **45 cycles**  
 
-**Interpretation:**
-- The model learns meaningful patterns
-- Linear assumptions are insufficient for precise RUL estimation
-- Indicates the need for non-linear models
+**Conclusion:**  
+The baseline model learns meaningful patterns, but linear assumptions limit accuracy.
 
 ---
 
-## Current Status
-✔ Data prepared and labeled  
-✔ Feature engineering completed  
-✔ Baseline model trained and evaluated  
-✔ Learning signal validated  
+### 7. Advanced Model – XGBoost Regressor
+To capture non-linear degradation behavior:
+
+- Trained an **XGBoost regression model**  
+- Compared performance with baseline  
+- Observed improved error metrics  
+
+This model was selected as the **final predictive model**.
 
 ---
 
-## Next Steps
-- Train non-linear models (e.g., XGBoost)
-- Compare performance against baseline
-- Select final model
-- Save trained model
-- Deploy model as an API using cloud services
+### 8. Model Serialization
+To prepare for deployment:
+
+- Saved the trained XGBoost model using `joblib`  
+- Saved the ordered list of feature columns  
+- Ensured consistency between training and inference  
+
+These serialized artifacts enable model reuse without retraining.
 
 ---
 
-## Tools & Technologies Used
+### 9. Deployment as an API
+The trained model was deployed as a **FastAPI service**, transforming it into a usable system.
+
+#### API Features
+- Loads trained model and feature configuration  
+- Accepts engine condition snapshots via JSON  
+- Performs real-time RUL prediction  
+- Returns both:
+  - Predicted RUL (numerical)  
+  - Risk classification (Low / Medium / High) 
+
+#### End point
+
+#### Unique Value Proposition
+- End-to-end ML system (not notebook-only)
+- Snapshot-based inference suitable for real-world use
+- Clean separation between model development and model usage
+- Ready for cloud deployment and frontend integration
+
+####Tools & Technologies Used
 - Python
 - pandas, NumPy
 - scikit-learn
+- XGBoost
 - Matplotlib
+- FastAPI
+- Joblib
+- Uvicorn
 - Jupyter Notebook
 - Git & GitHub
 
----
+####Key Learning Outcomes
+- Understanding predictive maintenance and RUL modeling
+- Feature selection through degradation analysis
+- Baseline vs advanced model comparison
+- Regression evaluation metrics (MAE, RMSE)
+- Model serialization and dependency management
+- API-based ML deployment
 
-## Key Learning Outcomes So Far
-- Understanding of predictive maintenance problems
-- Snapshot-based modeling for time-dependent systems
-- Feature selection through data visualization
-- Importance of baseline models
-- Proper use of regression metrics (MAE, RMSE)
-
----
-
-## Author
+####Author
 Shadya Panneerselvam
