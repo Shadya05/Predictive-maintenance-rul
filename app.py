@@ -2,12 +2,22 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
 import numpy as np
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
-# Load artifacts
+# Load model artifacts
 model = joblib.load("models/xgb_rul_model.pkl")
 feature_columns = joblib.load("models/feature_columns.pkl")
 
-app = FastAPI(title="RUL Prediction API")
+app = FastAPI(title="Turbofan Engine RUL Prediction API")
+
+# Serve frontend static files
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
+
+# Serve frontend homepage
+@app.get("/")
+def serve_frontend():
+    return FileResponse("frontend/index.html")
 
 # Input schema
 class EngineInput(BaseModel):
