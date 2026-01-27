@@ -1,3 +1,7 @@
+PROJECT VISIT LINK : https://predictive-maintenance-rul-production.up.railway.app/
+
+open aagudha paru
+
 # Predictive Maintenance – Remaining Useful Life (RUL) Prediction
 
 ![ML Pipeline](./readme.md/MLpipeline.jpeg)
